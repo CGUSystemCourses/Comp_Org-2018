@@ -12,6 +12,6 @@ module DMEM(MW,Address,Data_in,Data_out,clk);
 		end
 	end
 	always @(*) begin
-		assign Data_out = Data_memory[Address];
+		 Data_out = Data_memory[Address];
 	end
 endmodule

@@ -14,18 +14,20 @@ module CPU(IR,Data_in,PC,Address_out,Data_out,MW,clk,reset);
 		//if(reset == 1)
 			//PC = 0;
 	end
+	always @(*) begin
+	 Address_out = R[SA];
+	 Data_out=R[SB]; 
+	end
 	always @ (posedge clk) begin
 		if(reset)begin
 			PC = 0;
 		end
-		else begin
 		Opcode = IR[15:9];
 		DR = IR[8:6];
 		SA = IR[5:3];
 		SB = IR[2:0];
 		OP = {4'b0000,IR[2:0]};
 		AD = {IR[8:6],IR[2:0]};
-		Address_out = R[SA];
 		MW = IR[14]&!IR[15];
 		if ((IR[15]&&IR[14])==0)
 			PC = PC+1;
@@ -46,7 +48,7 @@ module CPU(IR,Data_in,PC,Address_out,Data_out,MW,clk,reset);
 			7'b1001100: R[DR]=OP;//LDI
 			7'b1000010: R[DR]=R[SA]+OP;//ADI
 			7'b0010000: R[DR]=Data_in;//LD
-			7'b0100000: Data_out=R[SB];//ST
+			//7'b0100000: Data_out=R[SB];//ST
 			7'b1100000: 
 				begin
 					if(R[SA]==0) PC = PC+AD;
@@ -59,6 +61,5 @@ module CPU(IR,Data_in,PC,Address_out,Data_out,MW,clk,reset);
 				end //BRN
 			7'b1110000: PC = R[SA];//JMP
 		endcase
-		end
 	end
 endmodule
